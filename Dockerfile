@@ -11,6 +11,8 @@ RUN curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-
 
 COPY rsyslog.conf /etc/rsyslog.conf
 
+COPY start.sh start.sh
+
 RUN sed -i "s/authpriv.none/authpriv.none,local6.none,local7.none/" /etc/rsyslog.d/50-default.conf
 
 RUN echo "if \$syslogfacility-text == 'local6' and \$programname == 'httpd' then /var/log/httpd-access.log" >> /etc/rsyslog.d/httpd.conf && \
