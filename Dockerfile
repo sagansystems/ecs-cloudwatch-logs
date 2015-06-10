@@ -9,10 +9,7 @@ RUN apt-get -q update && \
 
 RUN curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -o awslogs-agent-setup.py
 
-RUN sed -i "s/#\$ModLoad imudp/\$ModLoad imudp/" /etc/rsyslog.conf && \
-  sed -i "s/#\$UDPServerRun 514/\$UDPServerRun 514/" /etc/rsyslog.conf && \
-  sed -i "s/#\$ModLoad imtcp/\$ModLoad imtcp/" /etc/rsyslog.conf && \
-  sed -i "s/#\$InputTCPServerRun 514/\$InputTCPServerRun 514/" /etc/rsyslog.conf
+COPY rsyslog.conf /etc/rsyslog.conf
 
 RUN sed -i "s/authpriv.none/authpriv.none,local6.none,local7.none/" /etc/rsyslog.d/50-default.conf
 
@@ -28,4 +25,4 @@ RUN pip install supervisor
 COPY supervisord.conf /usr/local/etc/supervisord.conf
 
 EXPOSE 514/tcp 514/udp
-CMD ["/usr/local/bin/supervisord"]
+CMD ["./start.sh"]
